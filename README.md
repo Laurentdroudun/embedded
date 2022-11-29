@@ -1,2 +1,4 @@
-# embedded
-Embedded Machine Learning Project avec Flooooooooooo
+# Embedded
+
+# Reading .au file :
+Go in "archive/" file and launch "./build.sh" 
