@@ -4,6 +4,7 @@
 #include <cassert>
 #include "fft_utils.h"
 #include "constants.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -38,6 +39,20 @@ int readSample(ifstream &file) {
 	return (int)sample;
 }
 
+// void mean_std(std::vector<Complex> x, double &mean, double &ect) {
+// 	double sum=0.;
+// 	double sum2=0.;
+// 	int n=x.size();
+// 	for (int i = 0; i < n; ++i)
+// 	{
+// 		sum+=x[i];
+// 		sum2+=x[i]*x[i];
+// 	}
+// 	mean=sum/n;
+// 	float var=sum2/n-mean*mean;
+// 	ect=sqrt(var);
+// }
+
 int main() {
 	string filename="../genres/hiphop/hiphop.00002.au";
 	// string csv="../genres/hiphop/hiphop.00001.csv";
@@ -62,22 +77,51 @@ int main() {
 	cout << aufile.nbCanaux << endl;
 
 	std::vector<Complex> x;
+	std::vector<double> mu;
+	std::vector<double> sigma;
+	std::vector<double> spec;
 	x.resize(N);
-	std::vector<Complex> mu;
 	mu.resize(N);
-	std::vector<Complex> sigma;
 	sigma.resize(N);
+	spec.resize(N);
+	// initiliazer
+	for (int i = 0; i < sigma.size(); ++i)
+	{
+		sigma[i]=0;
+	}
+	std::vector<double> c;
+	std::vector<double> s;
 	if (!datafile.eof()) {
-		for (int k = 0; k < N; ++k)
+		for (int i = 0; i < K; ++i)
+		{
+			for (int k = 0; k < N; ++k)
+				{
+					x[k]=readSample(datafile);
+				}
+			ite_dit_fft(x);
+			// for_each(x.begin(),x.end(),norm)
+			for (int k = 0; k < N; ++k)
 			{
-				x[k]=readSample(datafile);
+				spec[k]=norm(x[k]);
 			}
-		ite_dit_fft(x);
-		cout << std::real(x[0]) << endl;
-
-		// for (int i = 0; i < K; ++i)
-		// {
-			
-		// }
+			// cout << spec << endl;
+			if (i==0) {
+				for (int k = 0; k < N; ++k)
+				{
+					mu[k]=spec[k];
+				}
+			}
+			// cout << mu[6] << endl;
+			else {
+				for (int k = 0; k < N; ++k)
+				{
+				mu[k]=(i-1)/i*mu[k]+1/i*spec[k];
+				s[k]=s[k]+spec[k];
+				c[k]=c[k]+pow(i*spec[k]-s[k],2)/(i*(i-1));
+				sigma[k]=c[k]/i;
+				}
+			}
+		}
 	}
 }
+
