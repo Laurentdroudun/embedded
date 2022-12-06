@@ -8,4 +8,5 @@ add_executable(flo_reading src/flo_main.cpp)
 
 
 target_link_libraries(reading tbb)
+target_link_libraries(flo_reading tbb)
 find_package(TBB REQUIRED COMPONENTS tbb)
