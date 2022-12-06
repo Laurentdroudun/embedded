@@ -73,7 +73,7 @@ int main() {
 				x[k]=readSample(datafile);
 			}
 		ite_dit_fft(x);
-		cout << x.real() << endl;
+		cout << std::real(x[0]) << endl;
 
 		// for (int i = 0; i < K; ++i)
 		// {
