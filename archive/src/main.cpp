@@ -2,6 +2,8 @@
 #include <fstream>
 #include <cstdio>
 #include <cassert>
+#include "fft_utils.h"
+#include "constants.h"
 
 using namespace std;
 
@@ -58,11 +60,24 @@ int main() {
 	cout << aufile.encodage << endl;
 	cout << aufile.freq << endl;
 	cout << aufile.nbCanaux << endl;
+
+	std::vector<Complex> x;
+	x.resize(N);
+	std::vector<Complex> mu;
+	mu.resize(N);
+	std::vector<Complex> sigma;
+	sigma.resize(N);
+	if (!datafile.eof()) {
+		for (int k = 0; k < N; ++k)
+			{
+				x[k]=readSample(datafile);
+			}
+		ite_dit_fft(x);
+		cout << x.real() << endl;
+
+		// for (int i = 0; i < K; ++i)
+		// {
+			
+		// }
+	}
 }
-
-
-	// datafile.read((char*)&aufile.nombreMagique,sizeof(aufile.nombreMagique));
-	// assert(aufile.nombreMagique==0x2e736e64);
-	// datafile.read((char*)&aufile.dataShift,sizeof(aufile.dataShift));
-	// datafile.read((char*)&aufile.dataLength,sizeof(aufile.dataLength));
-	// datafile.read((char*)&aufile.encodage,sizeof(aufile.encodage));

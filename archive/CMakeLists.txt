@@ -5,5 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(reading src/main.cpp)
 
+
 target_link_libraries(reading tbb)
 find_package(TBB REQUIRED COMPONENTS tbb)
