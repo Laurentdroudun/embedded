@@ -36,7 +36,6 @@ int readSample(ifstream &file) {
 
 int main() {
 	string name_au("../genres/hiphop/hiphop.00000.au");
-	cout<<name_au<<endl;
 	string name_csv("output.csv");
 
 	ifstream file_s;
@@ -57,6 +56,8 @@ int main() {
 
 		for (int j=0; j<N; j++) x.push_back(readSample(file_s));
 		ite_dit_fft(x);
+
+		// cout<<norm(x[10])<<endl;
 
 		for (int j=1; j<=N; j++) {
 			float a = ((j-1.)/j)*mu_prev[j-1];
@@ -81,32 +82,3 @@ int main() {
 	m[name_au] = {mu_prev, sigma_prev};
 
 }
-
-
-
-
-
-/*
-dans constant : n, k, l (et pi)
-l = n x k
-n : fft
-
-faire du 0 paving si signal trop court
-
-on divise le signal en k, et on donne un std vector de n échantillons
-le tout nous donne un f(t) appelé stft
-
-a la fin on veut deux vecteurs de taille n : 
-mu, moyenne temporelle du spectrogramme
-sigma, écart-type ""
-
-pb : stockage !
-donc on caclul ces deux vecteurs de manières itératives
-
-voir wikipédia calcul itératif pour la mise à jour de la variance
-
-
-
-
-entrainer le modèle linear.svm et récupérer les poids
-*/
