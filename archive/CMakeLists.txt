@@ -8,7 +8,7 @@ add_executable(flo_reading src/flo_main.cpp)
 # add_executable(reading src/svm_lau.py)
 
 add_library(headers src/constants.h src/fft_utils.h src/fft_utils.cpp)
-target_link_libraries(reading tbb headers)
+target_link_libraries(flo_reading tbb headers)
 
 # target_link_libraries(flo_reading tbb headers)
 
