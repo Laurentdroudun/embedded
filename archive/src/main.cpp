@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <iterator>
 #include <cstdio>
 #include <cassert>
 #include "fft_utils.h"
@@ -54,12 +55,13 @@ int readSample(ifstream &file) {
 // }
 
 int main() {
-	string filename="../genres/hiphop/hiphop.00002.au";
-	// string csv="../genres/hiphop/hiphop.00001.csv";
+	string filename="../genres/hiphop/hiphop.00002";
+	string csv_filename=filename+".csv";
+	string au_filename=filename+".au";
 	ifstream datafile;
-	// ofstream datafile_csv;
-	datafile.open(filename);
-	// datafile_csv.open(csv);
+	ofstream datafile_csv;
+	datafile.open(au_filename);
+	datafile_csv.open(csv_filename);
 	if (!datafile.is_open())
 		cout << "Impossible d'ouvrir le fichier" << endl;
 	AuFile aufile;
@@ -76,52 +78,40 @@ int main() {
 	cout << aufile.freq << endl;
 	cout << aufile.nbCanaux << endl;
 
-	std::vector<Complex> x;
-	std::vector<double> mu;
-	std::vector<double> sigma;
-	std::vector<double> spec;
-	x.resize(N);
-	mu.resize(N);
-	sigma.resize(N);
-	spec.resize(N);
-	// initiliazer
-	for (int i = 0; i < sigma.size(); ++i)
-	{
-		sigma[i]=0;
-	}
-	std::vector<double> c;
-	std::vector<double> s;
-	if (!datafile.eof()) {
-		for (int i = 0; i < K; ++i)
-		{
-			for (int k = 0; k < N; ++k)
-				{
-					x[k]=readSample(datafile);
-				}
-			ite_dit_fft(x);
-			// for_each(x.begin(),x.end(),norm)
-			for (int k = 0; k < N; ++k)
-			{
-				spec[k]=norm(x[k]);
-			}
-			// cout << spec << endl;
-			if (i==0) {
-				for (int k = 0; k < N; ++k)
-				{
-					mu[k]=spec[k];
-				}
-			}
-			// cout << mu[6] << endl;
-			else {
-				for (int k = 0; k < N; ++k)
-				{
-				mu[k]=(i-1)/i*mu[k]+1/i*spec[k];
-				s[k]=s[k]+spec[k];
-				c[k]=c[k]+pow(i*spec[k]-s[k],2)/(i*(i-1));
-				sigma[k]=c[k]/i;
-				}
-			}
+	for (int i=0; i<6; i++) cout<<read32bits(datafile)<<endl;
+
+	std::vector<float> mu_prev, sigma_prev;
+	for (int j=0; j<N; j++) mu_prev.push_back(0.);
+	for (int j=0; j<N; j++) sigma_prev.push_back(0.);
+
+	for (int i=0; i<K; i++) {
+		std::vector<Complex> x = {};
+		std::vector<float> mu_now = {}, sigma_now = {};
+
+		for (int j=0; j<N; j++) x.push_back(readSample(datafile));
+		ite_dit_fft(x);
+
+		for (int j=1; j<=N; j++) {
+			float a = ((j-1.)/j)*mu_prev[j-1];
+			float b = (1./j)*norm(x[j-1]);
+			mu_now.push_back(a+b);
 		}
+		for (int j=0; j<N; j++)	mu_prev[j] = mu_now[j];
+
+		auto c = sigma_prev[0];
+		auto s = norm(x[0]);
+		for (int j=2; j<=N; j++) {
+			s = s + norm(x[j-1]);
+			c = c + sigma_prev[j-1] + pow(j*norm(x[j-1])-s, 2)/(j*(j-1.));
+			sigma_now.push_back(sqrt(c/N));
+		}
+		for (int j=0; j<N; j++) sigma_prev[j] = sigma_now[j];
+	}
+	// cout<<mu_prev[10]<<" ; "<<sigma_prev[100] << "\n" <<endl;
+	
+	for (int i = 0; i < N; ++i)
+	{
+		cout << mu_prev[i] << "," << sigma_prev[i] << endl;
 	}
 }
 
