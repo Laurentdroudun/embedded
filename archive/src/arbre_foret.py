@@ -9,8 +9,10 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import LinearSVC
 
+from sklearn.ensemble import RandomForestClassifier
 
-dataset = pd.read_csv('output.csv', header=None)
+
+dataset = pd.read_csv('dataset_fft.csv', header=None)
 
 X = dataset.iloc[:, 0:-1]
 Y = dataset.iloc[:, -1:]
@@ -28,9 +30,12 @@ clf_svm = Pipeline((
     ("scaler", StandardScaler()),
     ("linear_svc", LinearSVC(C=1, loss="hinge"))
     )).fit(X_train, y_train)
+clf_rf = RandomForestClassifier().fit(X_train, y_train)
 
 score = clf.score(X_test, y_test)
 score_svm = clf_svm.score(X_test, y_test)
+score_rf = clf_rf.score(X_test, y_test)
 print('Accuracy : ', score)
 print('Accuracy svm : ', score_svm)
+print('Accuracy random forest : ', score_rf)
 
