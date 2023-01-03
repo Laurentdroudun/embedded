@@ -2,6 +2,8 @@ from sklearn import svm
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import LinearSVC
+from sklearn.datasets import make_classification
+
 import numpy as np
 from scipy import signal, fft
 from matplotlib import pyplot as plt
@@ -10,6 +12,7 @@ import os
 path = "../genres/"
 filenames=[]
 dir_list=os.listdir(path)
+print(dir_list)
 for dir_ in dir_list :
 	# print(file for file in os.listdir(path+dir_))
 	for file in os.listdir(path+dir_) :
@@ -40,21 +43,28 @@ def get_Xy(filename) :
 
 
 	data = np.array(d, dtype='float')
-	print(data[0], data[-1])
-	print(data.shape)
+	# print(data[0], data[-1])
+	# print(data.shape)
 	fs = 22050
 	f, t, Zxx = signal.stft(data, 22050, nperseg=512, noverlap=256, window='hamming', return_onesided=False)
 	Z = np.abs(Zxx)
-	print(Z.shape)
-	print(Z)
+	# print(Z.shape)
+	# print(Z)
 	m = np.mean(Z, axis=1)
 	e = np.std(Z, axis=1)
 
+	return m,e
 	# print(m)
 	# print(e)
-get_Xy(filenames[450])
-# X=np.vstack(m,e)
-# y=np.array(["filename"])
 
-# clf=svm.LinearSVC()
-# clf.fit(X,y)
+filename=filenames[450]
+m,e=get_Xy(filename)
+
+x,y=make_classification(n_samples=1000,n_features=1024,n_classes=10)
+
+X=np.vstack((m,e))
+y=np.array([filename])
+
+clf=svm.LinearSVC()
+clf.fit(X,y)
+

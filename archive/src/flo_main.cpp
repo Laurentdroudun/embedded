@@ -77,6 +77,11 @@ int main() {
 
 		cout<<mu_now[10]<<" ; "<<sigma_now[100]<<endl;
 	}
+	for (int i = 0; i < N; ++i)	
+		file_o << mu_now[i];
+	for (int i = 0; i < N; ++i)
+		file_o << sigma_now[i];
+	file_o << name_au << "\n";
 	
 	std::map<string, std::pair<std::vector<float>,std::vector<float>>> m = {}; //liste des coordonnées 
 	m[name_au] = {mu_prev, sigma_prev};
