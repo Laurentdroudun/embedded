@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import LinearSVC
 
 
-dataset = pd.read_csv('dataset_fft.csv', header=None)
+dataset = pd.read_csv('output.csv', header=None)
 
 X = dataset.iloc[:, 0:-1]
 Y = dataset.iloc[:, -1:]
