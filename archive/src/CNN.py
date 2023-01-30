@@ -1,66 +1,79 @@
+# Common imports
 import numpy as np
 import pandas as pd
 
+# machine learning packages
 from sklearn.model_selection import train_test_split
-
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import StandardScaler
 import tensorflow as tf
 import tensorflow.keras as keras
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.layers import Dropout
 
 
 
-dataset = pd.read_csv('dataset_fft.csv', header=None)
+df = pd.read_csv('./dataset_fft.csv', header=None)
 
-X = dataset.iloc[:, 0:-1]
-Y = dataset.iloc[:, -1:]
-Y = np.ravel(Y)
+class_list = df.iloc[:,-1]
 y = []
-for i in Y:
-    s = i.split(".")
-    y.append(s[0])
+for label in class_list:
+  if (label[0:5] == "blues"):
+    y.append(0)
+  if (label[0:9] == "classical"):
+    y.append(1)
+  if (label[0:7] == "country"):
+    y.append(2)
+  if (label[0:5] == "disco"):
+    y.append(3)
+  if (label[0:6] == "hiphop"):
+    y.append(4)
+  if (label[0:4] == "jazz"):
+    y.append(5)
+  if (label[0:5] == "metal"):
+    y.append(6)
+  if (label[0:3] == "pop"):
+    y.append(7)
+  if (label[0:6] == "reggae"):
+    y.append(8)
+  if (label[0:4] == "rock"):
+    y.append(9)
+y = LabelEncoder().fit_transform(y)
+
+fit = StandardScaler()
+X = fit.fit_transform(np.array(df.iloc[:,:-1], dtype=float))
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
 
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2)
 
-# print('Shape : ', X_train.shape + X_test.shape + X_val.shape)
+def trainModel(model, epochs, optimizer):
+  batch_size = 128
+  model.compile(optimizer=optimizer,
+                loss='sparse_categorical_crossentropy',
+                metrics='accuracy')
+  return model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=epochs,
+                   batch_size=batch_size)
 
-ds_train = tf.data.Dataset.from_tensor_slices((X_train, y_train))
-ds_val = tf.data.Dataset.from_tensor_slices((X_val, y_val))
-ds_test = tf.data.Dataset.from_tensor_slices((X_test, y_test))
+model = Sequential([
+    Dense(512, activation='relu', input_shape=(X_train.shape[1],)),
+    Dropout(0.2),
+    Dense(256, activation='relu'),
+    Dropout(0.2),
+    Dense(128, activation='relu'),
+    Dropout(0.2),
+    Dense(64, activation='relu'),
+    Dropout(0.2),
+    Dense(10, activation='softmax'),
+])
 
+model_history = trainModel(model=model, epochs=600, optimizer='adam')
 
-#Paramètres
-BATCH_SIZE = 32
-NB_EPOCHS = 20
-LEARNING_RATE = 0.001
-DECAY = 0.01
-label_nb = 10
-dataset_size = 1000
-
-model = Sequential()
-
-model.add(keras.layers.Conv2D(32, (3, 3), padding='same', input_shape=(1024, 1024, 1), activation = 'relu'))
-model.add(keras.layers.MaxPooling2D((2, 2)))
-model.add(keras.layers.Conv2D(64, (3, 3), padding='same', activation='relu'))
-model.add(keras.layers.Conv2D(64, (3, 3), padding='same', activation='relu'))
-model.add(keras.layers.MaxPooling2D((2, 2)))
-
-model.add(keras.layers.Flatten())
-model.add(keras.layers.Dense(64, activation = 'relu'))
-model.add(keras.layers.Dropout(0.5))
-model.add(keras.layers.Dense(32, activation = 'relu'))
-model.add(keras.layers.Dropout(0.5))
-model.add(keras.layers.Dense(label_nb, activation = 'softmax'))
+test_loss, test_acc = model.evaluate(X_test, y_test, batch_size=128)
+print('Loss : ', test_loss)
+print('\nAccuracy : ', test_acc*100)
 
 
-loss_fcn = tf.keras.losses.SparseCategoricalCrossentropy()
-optimizer_fcn = keras.optimizers.Adam(learning_rate=LEARNING_RATE, decay=DECAY)
-metrics_fcn = tf.keras.metrics.SparseCategoricalAccuracy()
-model.compile(loss=loss_fcn, optimizer=optimizer_fcn, metrics=metrics_fcn)
-
-history = model.fit(ds_train, steps_per_epoch=int(0.75 * dataset_size / BATCH_SIZE), validation_data=ds_val, validation_steps=int(0.15 * dataset_size / BATCH_SIZE), epochs=NB_EPOCHS)
-
-score = model.evaluate(X_test, y_test, batch_size=32)
-print('Scores : ', score)
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+tflite_model = converter.convert()
+open("model.tflite", "wb").write(tflite_model)

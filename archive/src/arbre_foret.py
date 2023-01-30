@@ -12,6 +12,7 @@ from sklearn.svm import LinearSVC
 from sklearn.ensemble import RandomForestClassifier
 
 
+
 dataset = pd.read_csv('dataset_fft.csv', header=None)
 
 X = dataset.iloc[:, 0:-1]
@@ -38,4 +39,12 @@ score_rf = clf_rf.score(X_test, y_test)
 print('Accuracy : ', score)
 print('Accuracy svm : ', score_svm)
 print('Accuracy random forest : ', score_rf)
+
+
+import emlearn
+import tensorflow as tf
+converted_model = emlearn.convert(clf, method='inline')
+converted_model.save(file='DecisionTreeClassifier.h')
+
+
 
