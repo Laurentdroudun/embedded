@@ -23,7 +23,7 @@ for i in Y:
     s = i.split(".")
     y.append(s[0])
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=50)
 
 print('Entrainement ...')
 clf = DecisionTreeClassifier().fit(X_train, y_train)
@@ -32,19 +32,18 @@ clf_svm = Pipeline((
     ("linear_svc", LinearSVC(C=1, loss="hinge"))
     )).fit(X_train, y_train)
 clf_rf = RandomForestClassifier().fit(X_train, y_train)
-
 score = clf.score(X_test, y_test)
 score_svm = clf_svm.score(X_test, y_test)
 score_rf = clf_rf.score(X_test, y_test)
-print('Accuracy : ', score)
+print('Accuracy decision tree : ', score)
 print('Accuracy svm : ', score_svm)
 print('Accuracy random forest : ', score_rf)
 
 
-import emlearn
-import tensorflow as tf
-converted_model = emlearn.convert(clf, method='inline')
-converted_model.save(file='DecisionTreeClassifier.h')
+# import emlearn
+# import tensorflow as tf
+# converted_model = emlearn.convert(clf, method='inline')
+# converted_model.save(file='DecisionTreeClassifier.h')
 
 
 

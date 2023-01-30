@@ -57,18 +57,18 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/laurent/Documents/Embedded/archive
+CMAKE_SOURCE_DIR = /home/laurent/Documents/embedded/archive
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/laurent/Documents/Embedded/archive/build
+CMAKE_BINARY_DIR = /home/laurent/Documents/embedded/archive/build
 
 #=============================================================================
 # Targets provided globally by CMake.
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/bin/cmake-gui -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/laurent/Documents/Embedded/archive/build/CMakeFiles /home/laurent/Documents/Embedded/archive/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/laurent/Documents/embedded/archive/build/CMakeFiles /home/laurent/Documents/embedded/archive/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/laurent/Documents/Embedded/archive/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/laurent/Documents/embedded/archive/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -117,41 +117,78 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named reading
+# Target rules for targets named flo_reading
 
 # Build rule for target.
-reading: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reading
-.PHONY : reading
+flo_reading: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 flo_reading
+.PHONY : flo_reading
 
 # fast build rule for target.
-reading/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/reading.dir/build.make CMakeFiles/reading.dir/build
-.PHONY : reading/fast
+flo_reading/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/flo_reading.dir/build.make CMakeFiles/flo_reading.dir/build
+.PHONY : flo_reading/fast
 
-src/main.o: src/main.cpp.o
-.PHONY : src/main.o
+#=============================================================================
+# Target rules for targets named headers
+
+# Build rule for target.
+headers: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 headers
+.PHONY : headers
+
+# fast build rule for target.
+headers/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/headers.dir/build.make CMakeFiles/headers.dir/build
+.PHONY : headers/fast
+
+src/fft_utils.o: src/fft_utils.cpp.o
+.PHONY : src/fft_utils.o
 
 # target to build an object file
-src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/reading.dir/build.make CMakeFiles/reading.dir/src/main.cpp.o
-.PHONY : src/main.cpp.o
+src/fft_utils.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/headers.dir/build.make CMakeFiles/headers.dir/src/fft_utils.cpp.o
+.PHONY : src/fft_utils.cpp.o
 
-src/main.i: src/main.cpp.i
-.PHONY : src/main.i
+src/fft_utils.i: src/fft_utils.cpp.i
+.PHONY : src/fft_utils.i
 
 # target to preprocess a source file
-src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/reading.dir/build.make CMakeFiles/reading.dir/src/main.cpp.i
-.PHONY : src/main.cpp.i
+src/fft_utils.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/headers.dir/build.make CMakeFiles/headers.dir/src/fft_utils.cpp.i
+.PHONY : src/fft_utils.cpp.i
 
-src/main.s: src/main.cpp.s
-.PHONY : src/main.s
+src/fft_utils.s: src/fft_utils.cpp.s
+.PHONY : src/fft_utils.s
 
 # target to generate assembly for a file
-src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/reading.dir/build.make CMakeFiles/reading.dir/src/main.cpp.s
-.PHONY : src/main.cpp.s
+src/fft_utils.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/headers.dir/build.make CMakeFiles/headers.dir/src/fft_utils.cpp.s
+.PHONY : src/fft_utils.cpp.s
+
+src/flo_main.o: src/flo_main.cpp.o
+.PHONY : src/flo_main.o
+
+# target to build an object file
+src/flo_main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/flo_reading.dir/build.make CMakeFiles/flo_reading.dir/src/flo_main.cpp.o
+.PHONY : src/flo_main.cpp.o
+
+src/flo_main.i: src/flo_main.cpp.i
+.PHONY : src/flo_main.i
+
+# target to preprocess a source file
+src/flo_main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/flo_reading.dir/build.make CMakeFiles/flo_reading.dir/src/flo_main.cpp.i
+.PHONY : src/flo_main.cpp.i
+
+src/flo_main.s: src/flo_main.cpp.s
+.PHONY : src/flo_main.s
+
+# target to generate assembly for a file
+src/flo_main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/flo_reading.dir/build.make CMakeFiles/flo_reading.dir/src/flo_main.cpp.s
+.PHONY : src/flo_main.cpp.s
 
 # Help Target
 help:
@@ -161,10 +198,14 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... reading"
-	@echo "... src/main.o"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
+	@echo "... flo_reading"
+	@echo "... headers"
+	@echo "... src/fft_utils.o"
+	@echo "... src/fft_utils.i"
+	@echo "... src/fft_utils.s"
+	@echo "... src/flo_main.o"
+	@echo "... src/flo_main.i"
+	@echo "... src/flo_main.s"
 .PHONY : help
 
 

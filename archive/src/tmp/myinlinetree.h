@@ -4,7 +4,7 @@
     #include <eml_trees.h>
     
 
-EmlTreesNode DecisionTreeClassifier_nodes[194] = {
+EmlTreesNode myinlinetree_nodes[194] = {
   { 322, 10005.25048828125, 1, 11 },
   { 1022, 159971592.0, 2, 10 },
   { 957, 3042557.625, 3, 8 },
@@ -201,16 +201,16 @@ EmlTreesNode DecisionTreeClassifier_nodes[194] = {
   { 206, 1892500.1875, 51, 49 } 
 };
 
-int32_t DecisionTreeClassifier_tree_roots[1] = { 0 };
+int32_t myinlinetree_tree_roots[1] = { 0 };
 
-EmlTrees DecisionTreeClassifier = {
+EmlTrees myinlinetree = {
         194,
-        DecisionTreeClassifier_nodes,	  
+        myinlinetree_nodes,	  
         1,
-        DecisionTreeClassifier_tree_roots,
+        myinlinetree_tree_roots,
     };
 
-static inline int32_t DecisionTreeClassifier_predict_tree_0(const float *features, int32_t features_length) {
+static inline int32_t myinlinetree_predict_tree_0(const float *features, int32_t features_length) {
           if (features[322] < 10005.25048828125) {
               if (features[1022] < 159971592.0) {
                   if (features[957] < 3042557.625) {
@@ -951,12 +951,12 @@ static inline int32_t DecisionTreeClassifier_predict_tree_0(const float *feature
         }
         
 
-int32_t DecisionTreeClassifier_predict(const float *features, int32_t features_length) {
+int32_t myinlinetree_predict(const float *features, int32_t features_length) {
 
         int32_t votes[10] = {0,};
         int32_t _class = -1;
 
-        _class = DecisionTreeClassifier_predict_tree_0(features, features_length); votes[_class] += 1;
+        _class = myinlinetree_predict_tree_0(features, features_length); votes[_class] += 1;
     
         int32_t most_voted_class = -1;
         int32_t most_voted_votes = 0;

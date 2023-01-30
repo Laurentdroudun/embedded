@@ -57,11 +57,11 @@ def trainModel(model, epochs, optimizer):
 
 model = Sequential([
     Dense(512, activation='relu', input_shape=(X_train.shape[1],)),
-    Dropout(0.2),
+    Dropout(0.4),
     Dense(256, activation='relu'),
-    Dropout(0.2),
+    Dropout(0.4),
     Dense(128, activation='relu'),
-    Dropout(0.2),
+    Dropout(0.3),
     Dense(64, activation='relu'),
     Dropout(0.2),
     Dense(10, activation='softmax'),

@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/reading.dir/src/main.cpp.o -o reading  -ltbb 
