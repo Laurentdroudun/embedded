@@ -23,6 +23,8 @@ for i in Y:
     s = i.split(".")
     y.append(s[0])
 
+print('shapes : ', X.shape, len(y))
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 print('Entrainement ...')
