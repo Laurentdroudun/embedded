@@ -64,7 +64,7 @@ int main() {
 		file_s.open(name_au_complete[i]);
 		for (int i=0; i<6; i++) cout<<read32Bits(file_s)<<endl;
 
-		std::vector<float> mu_prev, sigma_prev;
+		std::vector<float> mu_prev={}, sigma_prev={};
 		for (int j=0; j<N; j++) mu_prev.push_back(0.);
 		for (int j=0; j<N; j++) sigma_prev.push_back(0.);
 		cout << i << endl;
@@ -99,9 +99,6 @@ int main() {
 		for (int j = 0; j < N; ++j)
 			file_o << sigma_prev[j] << ", ";
 		file_o << name_au[i] << "\n";
-		// std::map<string, std::pair<std::vector<float>,std::vector<float>>> m = {}; //liste des coordonnées 
-		// m[name_au] = {mu_prev, sigma_prev};
 	}
-
-
+	file_o.close();
 }
