@@ -23,6 +23,8 @@ for i in Y:
     s = i.split(".")
     y.append(s[0])
 
+print('shapes : ', X.shape, len(y))
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=50)
 
 print('Entrainement ...')
@@ -40,10 +42,10 @@ print('Accuracy svm : ', score_svm)
 print('Accuracy random forest : ', score_rf)
 
 
-# import emlearn
-# import tensorflow as tf
-# converted_model = emlearn.convert(clf, method='inline')
-# converted_model.save(file='DecisionTreeClassifier.h')
+import emlearn
+import tensorflow as tf
+converted_model = emlearn.convert(clf, method='inline')
+converted_model.save(file='DecisionTreeClassifier.h')
 
 
 
