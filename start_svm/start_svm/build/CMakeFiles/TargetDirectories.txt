@@ -1,3 +1,0 @@
-/home/laurent/Documents/Embedded/start_svm/start_svm/build/CMakeFiles/start_svm.dir
-/home/laurent/Documents/Embedded/start_svm/start_svm/build/CMakeFiles/edit_cache.dir
-/home/laurent/Documents/Embedded/start_svm/start_svm/build/CMakeFiles/rebuild_cache.dir
